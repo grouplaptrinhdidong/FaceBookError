@@ -17,6 +17,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PersonProfileActivity extends AppCompatActivity {
@@ -26,9 +29,9 @@ public class PersonProfileActivity extends AppCompatActivity {
     private CircleImageView userProfileImage;
     private Button AddFriendbtn, Declinebtn;
 
-    private DatabaseReference FriendRequestRef, UsersRef;
+    private DatabaseReference FriendRequestRef, UsersRef, FriendRef;
     private FirebaseAuth mAuth;
-    private String senderUserId, receiverUserId, CURRENT_STATE;
+    private String senderUserId, receiverUserId, CURRENT_STATE,  saveCurrentDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,7 @@ public class PersonProfileActivity extends AppCompatActivity {
 
         UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         FriendRequestRef = FirebaseDatabase.getInstance().getReference().child("FriendRequests");
-
+        FriendRef =  FirebaseDatabase.getInstance().getReference().child("Friends");
 
         IntializeFields();
 
@@ -100,6 +103,9 @@ public class PersonProfileActivity extends AppCompatActivity {
                     if (CURRENT_STATE.equals("request_sent")){
                         CancelFriendRequest();
                     }
+                    if (CURRENT_STATE.equals("request_received")){
+                        AcceptFriendRequest();
+                    }
                 }
             });
         }
@@ -107,6 +113,53 @@ public class PersonProfileActivity extends AppCompatActivity {
             Declinebtn.setVisibility(View.INVISIBLE);
             AddFriendbtn.setVisibility(View.INVISIBLE);
         }
+    }
+
+    private void AcceptFriendRequest() {
+        Calendar calFordDate=Calendar.getInstance();
+        SimpleDateFormat currentDate= new SimpleDateFormat("dd-MM-yyyy");
+        saveCurrentDate=currentDate.format(calFordDate.getTime());
+        FriendRef.child(senderUserId).child(receiverUserId).child("date").setValue(saveCurrentDate)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            FriendRef.child(receiverUserId).child(senderUserId).child("date").setValue(saveCurrentDate)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if(task.isSuccessful()){
+                                                FriendRequestRef.child(senderUserId).child(receiverUserId)
+                                                        .removeValue()
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+
+                                                                if (task.isSuccessful()){
+                                                                    FriendRequestRef.child(receiverUserId).child(senderUserId)
+                                                                            .removeValue()
+                                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                @Override
+                                                                                public void onComplete(@NonNull Task<Void> task) {
+
+                                                                                    if (task.isSuccessful()){
+                                                                                        AddFriendbtn.setEnabled(true);
+                                                                                        CURRENT_STATE = "friends";
+                                                                                        AddFriendbtn.setText("Unfriend");
+                                                                                        Declinebtn.setVisibility(View.INVISIBLE);
+                                                                                        Declinebtn.setEnabled(false);
+                                                                                    }
+                                                                                }
+                                                                            });
+                                                                }
+                                                            }
+                                                        });
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                });
     }
 
     private void CancelFriendRequest() {
@@ -152,6 +205,13 @@ public class PersonProfileActivity extends AppCompatActivity {
                                 AddFriendbtn.setText("Delete request");
                                 Declinebtn.setVisibility(View.INVISIBLE);
                                 Declinebtn.setEnabled(false);
+
+                            }
+                            else  if (request_type.equals("received")){
+                                CURRENT_STATE = "request_received";
+                                AddFriendbtn.setText("Accept request");
+                                Declinebtn.setVisibility(View.VISIBLE);
+                                Declinebtn.setEnabled(true);
 
                             }
                         }
