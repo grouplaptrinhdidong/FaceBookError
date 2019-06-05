@@ -9,8 +9,10 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,6 +21,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Comment;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -87,7 +91,52 @@ public class CommentsActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    protected void onStart(){
+        super.onStart();
+        FirebaseRecyclerAdapter<Comments, CommentsViewHolder> fbRecycleAdapter
+                = new FirebaseRecyclerAdapter<Comments, CommentsViewHolder>(
+               Comments.class,
+                R.layout.all_comments_layout,
+                CommentsViewHolder.class,
+                PostsRef
+        )
+        {
+            @Override
+            protected void populateViewHolder(CommentsViewHolder viewHolder, Comments model, int position) {
+                viewHolder.setUser(model.getUser());
+                viewHolder.setComment(model.getComment());
+                viewHolder.setDate(model.getDate());
+                viewHolder.setTime(model.getTime());
+            }
+        };
+        CommentsList.setAdapter(fbRecycleAdapter);
+    }
+    public static class CommentsViewHolder extends RecyclerView.ViewHolder
+    {
+        View mView;
+        public CommentsViewHolder(@NonNull View itemView) {
+            super(itemView);
+            mView = itemView;
+        }
+        public void setUser(String user) {
+            TextView myUsername = (TextView) mView.findViewById(R.id.comment_username);
+            myUsername.setText("@"+user+"  ");
+        }
+        public void setComment(String comment) {
+            TextView myComment = (TextView) mView.findViewById(R.id.comment_text);
+            myComment.setText(comment);
+        }
+        public void setDate(String date) {
+            TextView myDate = (TextView) mView.findViewById(R.id.comment_date);
+            myDate.setText("  Date: " + date);
+        }
+        public void setTime(String time) {
+            TextView myTime = (TextView) mView.findViewById(R.id.comment_time);
+            myTime.setText("  Time: "+time);
+        }
 
+    }
     private void ValidateComment(String userName) {
         String commentText = CommentInputText.getText().toString();
         if(TextUtils.isEmpty(commentText)){

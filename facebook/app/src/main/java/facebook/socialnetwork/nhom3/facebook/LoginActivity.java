@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private Button btnlogin, btnRegister;
     private EditText editTextUsername, editTextPassword;
-
+    private TextView forgetPasswordLink;
     private FirebaseAuth mAuth;
     private ProgressDialog loadingBar;
 
@@ -39,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         btnlogin = (Button) findViewById(R.id.btLogin_login);
         btnRegister = (Button) findViewById(R.id.btLogin_Create_account);
         loadingBar = new ProgressDialog(this);
-
+        forgetPasswordLink = (TextView) findViewById(R.id.forget_password_link);
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,7 +48,12 @@ public class LoginActivity extends AppCompatActivity {
                 SendUserToRegisterActivity();
             }
         });
-
+        forgetPasswordLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
+            }
+        });
         btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
