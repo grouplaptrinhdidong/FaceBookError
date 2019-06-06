@@ -1,13 +1,13 @@
 package facebook.socialnetwork.nhom3.facebook;
 
 public class Comments {
-    public String comment, date, time, user;
+    public String comment, date, time, username;
 
-    public Comments(String comment, String date, String time, String user) {
+    public Comments(String comment, String date, String time, String username) {
         this.comment = comment;
         this.date = date;
         this.time = time;
-        this.user = user;
+        this.username = username;
     }
     public Comments(){
 
@@ -36,11 +36,11 @@ public class Comments {
         this.time = time;
     }
 
-    public String getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

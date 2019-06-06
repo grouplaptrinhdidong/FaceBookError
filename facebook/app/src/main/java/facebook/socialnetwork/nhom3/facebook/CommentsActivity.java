@@ -104,7 +104,7 @@ public class CommentsActivity extends AppCompatActivity {
         {
             @Override
             protected void populateViewHolder(CommentsViewHolder viewHolder, Comments model, int position) {
-                viewHolder.setUser(model.getUser());
+                viewHolder.setUser(model.getUsername());
                 viewHolder.setComment(model.getComment());
                 viewHolder.setDate(model.getDate());
                 viewHolder.setTime(model.getTime());

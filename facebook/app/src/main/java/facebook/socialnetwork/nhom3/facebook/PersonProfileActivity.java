@@ -106,6 +106,9 @@ public class PersonProfileActivity extends AppCompatActivity {
                     if (CURRENT_STATE.equals("request_received")){
                         AcceptFriendRequest();
                     }
+                    if (CURRENT_STATE.equals("friends")){
+                        UnfriendExitingFriend();
+                    }
                 }
             });
         }
@@ -113,6 +116,34 @@ public class PersonProfileActivity extends AppCompatActivity {
             Declinebtn.setVisibility(View.INVISIBLE);
             AddFriendbtn.setVisibility(View.INVISIBLE);
         }
+    }
+
+    private void UnfriendExitingFriend() {
+        FriendRef.child(senderUserId).child(receiverUserId)
+                .removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        if (task.isSuccessful()){
+                            FriendRef.child(receiverUserId).child(senderUserId)
+                                    .removeValue()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+
+                                            if (task.isSuccessful()){
+                                                AddFriendbtn.setEnabled(true);
+                                                CURRENT_STATE = "not_friends";
+                                                AddFriendbtn.setText("Add friend");
+                                                Declinebtn.setVisibility(View.INVISIBLE);
+                                                Declinebtn.setEnabled(false);
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                });
     }
 
     private void AcceptFriendRequest() {
@@ -212,8 +243,33 @@ public class PersonProfileActivity extends AppCompatActivity {
                                 AddFriendbtn.setText("Accept request");
                                 Declinebtn.setVisibility(View.VISIBLE);
                                 Declinebtn.setEnabled(true);
+                                Declinebtn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        CancelFriendRequest();
+                                    }
+                                });
 
                             }
+                        }
+                        else {
+                            FriendRef.child(senderUserId)
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            if(dataSnapshot.hasChild(receiverUserId)){
+                                                CURRENT_STATE = "friends";
+                                                AddFriendbtn.setText("Unfriend");
+                                                Declinebtn.setVisibility(View.INVISIBLE);
+                                                Declinebtn.setEnabled(false);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
                         }
                     }
 
