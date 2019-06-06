@@ -344,7 +344,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+    private void SendUserToFriendsActivity() {
+        Intent FriendsIntent = new Intent(MainActivity.this, FriendsActivity.class);
+        startActivity(FriendsIntent);
+        finish();
+    }
 
     private void SendUserToSetupActivity() {
         Intent setupIntent = new Intent(MainActivity.this, SetupActivity.class);
@@ -399,6 +403,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this,"Home", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_friends:
+                SendUserToFriendsActivity();
                 Toast.makeText(this,"Friend", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_find_friends:
