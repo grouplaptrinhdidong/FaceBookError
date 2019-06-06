@@ -347,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
     private void SendUserToFriendsActivity() {
         Intent FriendsIntent = new Intent(MainActivity.this, FriendsActivity.class);
         startActivity(FriendsIntent);
-        finish();
+
     }
 
     private void SendUserToSetupActivity() {
@@ -411,6 +411,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this,"find friends", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_messages:
+                SendUserToFriendsActivity();
                 Toast.makeText(this,"Messages", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_settings:

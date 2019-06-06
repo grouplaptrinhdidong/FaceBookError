@@ -148,7 +148,7 @@ public class CommentsActivity extends AppCompatActivity {
             final String saveCurrentDate=currentDate.format(calFordDate.getTime());
 
             Calendar calFordTime=Calendar.getInstance();
-            SimpleDateFormat currentTime= new SimpleDateFormat("HH:mm");
+            SimpleDateFormat currentTime= new SimpleDateFormat("HH:mm:ss");
             final String saveCurrentTime=currentTime.format(calFordTime.getTime());
 
             final String RandomKey = current_user_id + saveCurrentDate + saveCurrentTime;

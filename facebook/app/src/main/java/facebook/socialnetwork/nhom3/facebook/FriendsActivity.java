@@ -1,7 +1,10 @@
 package facebook.socialnetwork.nhom3.facebook;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.ColorSpace;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -62,8 +65,46 @@ public class FriendsActivity extends AppCompatActivity {
                         if(dataSnapshot.exists()){
                             final String userName = dataSnapshot.child("fullname").getValue().toString();
                             final String profileImage = dataSnapshot.child("profileimage").getValue().toString();
+
                             viewHolder.setFullname(userName);
                             viewHolder.setProfileimage(getApplicationContext(), profileImage);
+
+                            //set 2 option: chat or view profile
+                            viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    CharSequence options[] = new CharSequence[]{
+                                        userName + "'s Profile",
+                                        "Send Message"
+                                    };
+                                    AlertDialog.Builder builder =new AlertDialog.Builder(FriendsActivity.this);
+                                    builder.setTitle("Select Option");
+
+                                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                            //option view profile
+                                            if(which ==0){
+
+                                                Intent profileintent =new Intent(FriendsActivity.this, PersonProfileActivity.class);
+                                                profileintent.putExtra("visit_user_id",usersIDs);
+                                                startActivity(profileintent);
+
+                                            }if(which==1){
+
+                                                //option chat
+                                                Intent Chatintent =new Intent(FriendsActivity.this, ChatActivity.class);
+                                                Chatintent.putExtra("visit_user_id",usersIDs);
+                                                Chatintent.putExtra("userName",userName);
+                                                startActivity(Chatintent);
+                                            }
+                                        }
+                                    });
+
+                                    builder.show();
+                                }
+                            });
                         }
                     }
 
