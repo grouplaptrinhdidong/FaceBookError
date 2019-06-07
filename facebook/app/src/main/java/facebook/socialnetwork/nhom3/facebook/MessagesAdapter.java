@@ -90,23 +90,28 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
             }
         });
 
+
+        holder.ReceiverMessageText.setVisibility(View.INVISIBLE);
+        holder.SenderMessageText.setVisibility(View.INVISIBLE);
+        holder.receiverProfileImage.setVisibility(View.INVISIBLE);
+        holder.messageImg.setVisibility(View.GONE);
+
         if(fromMessageType.equals("text")){
-            holder.ReceiverMessageText.setVisibility(View.INVISIBLE);
-            holder.receiverProfileImage.setVisibility(View.INVISIBLE);
-            holder.messageImg.setVisibility(View.INVISIBLE);
 
             //display messages
             if(fromUserID.equals(messageSenderID)){
 
+                holder.SenderMessageText.setVisibility(View.VISIBLE);
                 holder.SenderMessageText.setBackgroundResource(R.drawable.sender_message_text_background);
                 holder.SenderMessageText.setTextColor(Color.WHITE);
                 holder.SenderMessageText.setGravity(Gravity.LEFT);
-                //holder.messageImg.setVisibility(View.INVISIBLE);
+                holder.messageImg.setVisibility(View.GONE);
+                //holder.messageImg.setMaxHeight(0);
                 holder.SenderMessageText.setText(messages.getMessage());
 
             }else {
                 holder.SenderMessageText.setVisibility(View.INVISIBLE);
-                //holder.messageImg.setVisibility(View.INVISIBLE);
+                //holder.messageImg.setVisibility(View.GONE);
                 holder.ReceiverMessageText.setVisibility(View.VISIBLE);
                 holder.receiverProfileImage.setVisibility(View.VISIBLE);
 
@@ -117,14 +122,40 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
             }
         }
         else{
+                holder.receiverProfileImage.setVisibility(View.VISIBLE);
+                holder.messageImg.setVisibility(View.VISIBLE);
                 holder.ReceiverMessageText.setVisibility(View.INVISIBLE);
                 holder.SenderMessageText.setVisibility(View.INVISIBLE);
-                holder.SenderMessageText.setPadding(0,0,0,0);
-                holder.ReceiverMessageText.setPadding(0,0,0,0);
+               /* holder.SenderMessageText.setPadding(0,0,0,0);
+                holder.ReceiverMessageText.setPadding(0,0,0,0);*/
 
             Picasso.with(holder.receiverProfileImage.getContext()).load(messages.getMessage())
                     .placeholder(R.drawable.profile).into(holder.messageImg);
+           /* Picasso.with(holder.messageImg.getContext()).load(messages.getMessage())
+                    .into(holder.messageImg);*/
         }
+
+       /* holder.messageText.setVisibility(View.GONE);
+        holder.messagePicture.setVisibility(View.GONE);
+        if("text".equals(fromMessageType)){
+            holder.messageText.setVisibility(View.VISIBLE);
+            if(Objects.equals(fromUserId, messageSenderId)){
+                holder.messageText.setBackgroundResource(R.drawable.message_text_background_two);
+                holder.messageText.setTextColor(Color.BLACK);
+                holder.messageText.setGravity(Gravity.RIGHT);
+            }
+            else{
+                holder.messageText.setBackgroundResource(R.drawable.message_text_background);
+                holder.messageText.setTextColor(Color.WHITE);
+                holder.messageText.setGravity(Gravity.LEFT);
+            }
+            holder.messageText.setText(messages.getMessage());
+        }else{
+            holder.messagePicture.setVisibility(View.VISIBLE);
+            Picasso.with(holder.messagePicture.getContext()).load(messages.getMessage())
+                    .into(holder.messagePicture);
+        }*/
+
 
     }
 
