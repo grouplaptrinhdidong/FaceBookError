@@ -30,6 +30,11 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
@@ -144,6 +149,26 @@ public class MainActivity extends AppCompatActivity {
         DisplayAllUsersPosts();
     }
 
+    //update User Status
+    public void updateUserStatus(String state){
+        String saveCurrentDate, saveCurrentTime;
+
+        Calendar calForDate = Calendar.getInstance();
+        SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
+        saveCurrentDate = currentDate.format(calForDate.getTime());
+
+        Calendar calForTime = Calendar.getInstance();
+        SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm:ss a");
+        saveCurrentTime = currentTime.format(calForTime.getTime());
+
+        Map currentStateMap = new HashMap();
+        currentStateMap.put("time", saveCurrentTime);
+        currentStateMap.put("date", saveCurrentDate);
+        currentStateMap.put("type", state);
+
+        UsersRef.child(currentUserID).child("userState")
+                .updateChildren(currentStateMap);
+    }
     private void DisplayAllUsersPosts() {
 
 
@@ -219,6 +244,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 };
         postList.setAdapter(firebaseRecyclerAdapter);
+        updateUserStatus("online");
     }
 
 
@@ -316,17 +342,25 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        if(currentUser == null){
+        if (currentUser == null) {
             SendUserToLoginActivity();
             //SendUserToRegisterActivity();
-        }
-        else {
+        } else {
             CheckUserExistence();
         }
 
-
     }
-
+    //when user minimize app
+   /*@Override
+    protected void onStop(){
+        super.onStop();
+        updateUserStatus("offline");
+    }*/
+   /* @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        updateUserStatus("offline");
+    }*/
     private void CheckUserExistence() {
         final String current_user_id = mAuth.getCurrentUser().getUid();
 
@@ -419,6 +453,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this,"Settings", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_logout:
+                updateUserStatus("offline");
                 mAuth.signOut();
                 SendUserToLoginActivity();
                 //Toast.makeText(this,"Logout", Toast.LENGTH_SHORT).show();

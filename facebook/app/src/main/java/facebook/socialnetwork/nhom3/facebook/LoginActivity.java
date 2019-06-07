@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView forgetPasswordLink;
     private FirebaseAuth mAuth;
     private ProgressDialog loadingBar;
+    private Boolean emailAddressChecker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,9 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
-                                    
-                                    SendUserToMainActivity();
-                                    Toast.makeText(LoginActivity.this, "You are logged in successfully.", Toast.LENGTH_SHORT).show();
+                                    VerifyEmailAddress();
                                     loadingBar.dismiss();
                                 }
                                 else {
@@ -113,6 +112,19 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    //check email input
+    private void VerifyEmailAddress(){
+        FirebaseUser user = mAuth.getCurrentUser();
+        emailAddressChecker = user.isEmailVerified();
+        if(emailAddressChecker){
+            SendUserToMainActivity();
+        }
+        else {
+            //don't allow user to go to MainActivity
+            Toast.makeText(this, "Please verify your account first...", Toast.LENGTH_SHORT).show();
+            mAuth.signOut();
+        }
+    }
     private void SendUserToMainActivity() {
         Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
