@@ -63,17 +63,20 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         //ktra currentuser ton tai, neu k chuyen den loginactivity, neu co lay userid => lay profileimage, fullname
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser == null){
+        //FirebaseUser currentUser = mAuth.getCurrentUser();
+        /*if (currentUser == null){
             SendUserToLoginActivity();
         }else{
             currentUserID = mAuth.getCurrentUser().getUid();
-        }
+        }*/
+
 
 
         UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         PostsRef = FirebaseDatabase.getInstance().getReference().child("Posts");
         LikesRef = FirebaseDatabase.getInstance().getReference().child("Likes");
+
+        currentUserID = mAuth.getCurrentUser().getUid();
 
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
@@ -117,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
                         Picasso.with(MainActivity.this).load(image).placeholder(R.drawable.profile).into(NavProfileImage);
                     }
                     else {
+                        SendUserToSetupActivity();
                         Toast.makeText(MainActivity.this,"Profile image or name do not exists...", Toast.LENGTH_SHORT).show();
                     }
 

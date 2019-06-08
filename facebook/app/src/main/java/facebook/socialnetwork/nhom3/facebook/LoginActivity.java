@@ -109,7 +109,14 @@ public class LoginActivity extends AppCompatActivity {
         if(currentUser != null){
             SendUserToMainActivity();
             //SendUserToRegisterActivity();
+            //SendUserToSetupActivity();
         }
+    }
+    private void SendUserToSetupActivity() {
+        Intent setupIntent = new Intent(LoginActivity.this, SetupActivity.class);
+        setupIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(setupIntent);
+        finish();
     }
 
     //check email input

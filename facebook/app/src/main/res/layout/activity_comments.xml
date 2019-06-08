@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="5dp"
-    android:background="@color/mainBackground"
+    android:background="@drawable/bg5"
     tools:context=".CommentsActivity">
 
     <TextView
@@ -46,8 +46,10 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/comment_input"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/post_comment"
-        android:padding="15dp"/>
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="-4dp"
+        android:padding="15dp"
+        android:src="@drawable/post_comment" />
 
 
 

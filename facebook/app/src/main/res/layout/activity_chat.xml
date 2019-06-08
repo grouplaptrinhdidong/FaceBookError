@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ChatActivity">
 
+
     <include
         android:id="@+id/chat_bar_layout"
         layout="@layout/app_bar_layout">
@@ -17,7 +18,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/chat_bar_layout"
         android:layout_above="@+id/myLinearLayout"
-        android:background="#f6f9e7"
+        android:background="@drawable/bg4"
         android:padding="10dp"
         android:layout_alignParentStart="true" />
 
