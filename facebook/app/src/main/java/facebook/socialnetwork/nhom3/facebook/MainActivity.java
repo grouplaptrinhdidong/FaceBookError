@@ -416,7 +416,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(settingsIntent);
     }
     private void SendUserFriendRequestActivity() {
-        Intent FriendsRequestIntent = new Intent(MainActivity.this, FriendsRequestActivity.class);
+        Intent FriendsRequestIntent = new Intent(MainActivity.this, FriendRequestsActivity.class);
         startActivity(FriendsRequestIntent);
     }
 
