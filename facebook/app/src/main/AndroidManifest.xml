@@ -49,7 +49,8 @@
         <activity
             android:name=".MyPostsActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".FriendRequestsActivity"></activity>
+        <activity android:name=".FriendRequestsActivity"
+            android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>

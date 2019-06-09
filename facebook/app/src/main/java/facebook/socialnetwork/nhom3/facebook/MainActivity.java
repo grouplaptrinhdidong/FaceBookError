@@ -194,6 +194,8 @@ public class MainActivity extends AppCompatActivity {
                         viewHolder.setPostimage(getApplicationContext(), model.getPostimage());
 
                         viewHolder.setLikeButtonStatus(PostKey);
+                        viewHolder.setCountCmt(PostKey);
+
 
                         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -257,10 +259,11 @@ public class MainActivity extends AppCompatActivity {
         View mView;
 
         ImageButton LikePostButton, CommentPostButton;
-        TextView DisplayNoOfLikes;
+        TextView DisplayNoOfLikes,countCommentText ;
         int countLikes;
         String currentUserId;
-        DatabaseReference LikesRef;
+        DatabaseReference LikesRef,CommentRef;
+        int countComments;
 
         public PostsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -269,10 +272,35 @@ public class MainActivity extends AppCompatActivity {
             LikePostButton =(ImageButton) mView.findViewById(R.id.like_button);
             CommentPostButton =(ImageButton) mView.findViewById(R.id.comment_button);
             DisplayNoOfLikes =(TextView) mView.findViewById(R.id.display_no_of_likes);
+            countCommentText= (TextView) mView.findViewById(R.id.countComment);
 
             LikesRef =FirebaseDatabase.getInstance().getReference().child("Likes");
-            currentUserId =FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+            currentUserId =FirebaseAuth.getInstance().getCurrentUser().getUid();
+            CommentRef = FirebaseDatabase.getInstance().getReference().child("Posts");
+
+
+        }
+
+        //set count for comments
+        public void setCountCmt(final String PostKey){
+            CommentRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.child(PostKey).hasChild("Comments")){
+                        countComments=(int) dataSnapshot.child(PostKey).child("Comments").getChildrenCount();
+
+                        countCommentText.setText(Integer.toString(countComments));
+                    }else {
+                        countCommentText.setText("0");
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
 
 
