@@ -1,6 +1,8 @@
 package facebook.socialnetwork.nhom3.facebook;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -64,7 +66,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MessageViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MessageViewHolder holder, final int position) {
 
         String messageSenderID = mAuth.getCurrentUser().getUid();
         Messages messages =userMessagesList.get(position);
@@ -126,48 +128,36 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
         }
         else{
 
-          /*      holder.receiverProfileImage.setVisibility(View.VISIBLE);
-                holder.senderMessageImage.setVisibility(View.VISIBLE);
-                holder.ReceiverMessageText.setVisibility(View.INVISIBLE);
-                holder.SenderMessageText.setVisibility(View.INVISIBLE);
-
-
-            Picasso.with(holder.receiverProfileImage.getContext()).load(messages.getMessage())
-                    .placeholder(R.drawable.profile).into(holder.senderMessageImage);*/
-           /* Picasso.with(holder.senderMessageImage.getContext()).load(messages.getMessage())
-                    .into(holder.senderMessageImage);*/
-
             if(fromUserID.equals(messageSenderID)){
 
-                //holder.receiverProfileImage.setVisibility(View.VISIBLE);
-                //holder.senderMessageImage.setVisibility(View.VISIBLE);
                 holder.receiverMessageImage.setVisibility(View.VISIBLE);
                 holder.ReceiverMessageText.setVisibility(View.INVISIBLE);
                 holder.SenderMessageText.setVisibility(View.INVISIBLE);
 
-
-                /*Picasso.with(holder.senderMessageImage.getContext()).load(messages.getMessage())
-                        .placeholder(R.drawable.profile).into(holder.senderMessageImage);*/
-                /*Picasso.with(holder.senderMessageImage.getContext()).load(messages.getMessage())
-                        .into(holder.senderMessageImage);*/
                 Picasso.with(holder.receiverMessageImage.getContext()).load(messages.getMessage())
                         .into(holder.receiverMessageImage);
+
+
 
             }else {
 
                 holder.receiverProfileImage.setVisibility(View.VISIBLE);
                 holder.senderMessageImage.setVisibility(View.VISIBLE);
-                //holder.receiverMessageImage.setVisibility(View.VISIBLE);
+
                 holder.ReceiverMessageText.setVisibility(View.INVISIBLE);
                 holder.SenderMessageText.setVisibility(View.INVISIBLE);
 
 
-                /*Picasso.with(holder.receiverProfileImage.getContext()).load(messages.getMessage())
-                        .placeholder(R.drawable.profile).into(holder.receiverMessageImage);*/
-                /*Picasso.with(holder.receiverMessageImage.getContext()).load(messages.getMessage())
-                        .into(holder.receiverMessageImage);*/
                 Picasso.with(holder.senderMessageImage.getContext()).load(messages.getMessage())
                         .into(holder.senderMessageImage);
+
+                holder.senderMessageImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(userMessagesList.get(position).getMessage()));
+                        holder.itemView.getContext().startActivity(intent);
+                    }
+                });
             }
         }
 
