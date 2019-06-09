@@ -415,7 +415,10 @@ public class MainActivity extends AppCompatActivity {
         Intent settingsIntent = new Intent(MainActivity.this,FindFriendsActivity.class);
         startActivity(settingsIntent);
     }
-
+    private void SendUserFriendRequestActivity() {
+        Intent FriendsRequestIntent = new Intent(MainActivity.this, FriendsRequestActivity.class);
+        startActivity(FriendsRequestIntent);
+    }
 
 
     @Override
@@ -456,6 +459,10 @@ public class MainActivity extends AppCompatActivity {
                 SendUserToSettingsActivity();
                 Toast.makeText(this,"Settings", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.nav_friend_request:
+                SendUserFriendRequestActivity();
+                Toast.makeText(this,"Friends request", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.nav_logout:
                 updateUserStatus("offline");
                 mAuth.signOut();
@@ -465,4 +472,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+
 }
