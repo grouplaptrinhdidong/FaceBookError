@@ -16,6 +16,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -80,6 +81,8 @@ public class CommentsActivity extends AppCompatActivity {
                             ValidateComment(userName);
 
                             CommentInputText.setText("");
+                            CommentsList.smoothScrollToPosition(CommentsList.getAdapter().getItemCount());
+
                         }
                     }
 
@@ -88,6 +91,34 @@ public class CommentsActivity extends AppCompatActivity {
 
                     }
                 });
+                UsersRef.child(current_user_id).addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                        CommentsList.smoothScrollToPosition(CommentsList.getAdapter().getItemCount());
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
             }
         });
     }
@@ -151,7 +182,7 @@ public class CommentsActivity extends AppCompatActivity {
             SimpleDateFormat currentTime= new SimpleDateFormat("HH:mm:ss");
             final String saveCurrentTime=currentTime.format(calFordTime.getTime());
 
-            final String RandomKey = current_user_id + saveCurrentDate + saveCurrentTime;
+            final String RandomKey = saveCurrentDate + saveCurrentTime + current_user_id ;
 
             HashMap commentsMap= new HashMap();
             commentsMap.put("uid", current_user_id);
