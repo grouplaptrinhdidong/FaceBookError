@@ -206,6 +206,47 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
                         });
                     }
                 }
+                else if (fromMessageType.equals("mp3")){
+                    if(fromUserID.equals(messageSenderID)){
+
+                        holder.receiverMessageImage.setVisibility(View.VISIBLE);
+                        holder.senderMessageImage.setImageResource(R.drawable.filemp3);
+                        holder.senderMessageImage.setMaxHeight(1);
+                        holder.senderMessageImage.set
+                        holder.ReceiverMessageText.setVisibility(View.INVISIBLE);
+                        holder.SenderMessageText.setVisibility(View.INVISIBLE);
+
+                        holder.receiverMessageImage.setImageResource(R.drawable.filemp3);
+
+                        holder.receiverMessageImage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(userMessagesList.get(position).getMessage()));
+                                holder.itemView.getContext().startActivity(intent);
+                            }
+                        });
+
+                    }else {
+
+                        holder.receiverProfileImage.setVisibility(View.VISIBLE);
+                        holder.senderMessageImage.setVisibility(View.VISIBLE);
+
+                        holder.receiverMessageImage.setImageResource(R.drawable.fileword);
+                        holder.ReceiverMessageText.setVisibility(View.INVISIBLE);
+                        holder.SenderMessageText.setVisibility(View.INVISIBLE);
+
+
+                        holder.senderMessageImage.setImageResource(R.drawable.fileword);
+
+                        holder.senderMessageImage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(userMessagesList.get(position).getMessage()));
+                                holder.itemView.getContext().startActivity(intent);
+                            }
+                        });
+                    }
+                }
                 else {
                     if(fromUserID.equals(messageSenderID)){
 

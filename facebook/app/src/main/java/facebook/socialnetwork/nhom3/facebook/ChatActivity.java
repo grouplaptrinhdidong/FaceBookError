@@ -119,7 +119,8 @@ public class ChatActivity extends AppCompatActivity {
                         {
                           "Image",
                           "PDF File",
-                          "MS Word"
+                          "MS Word",
+                            "Audio"
                         };
                 AlertDialog.Builder builder =new AlertDialog.Builder(ChatActivity.this);
                 builder.setTitle("Select Option");
@@ -151,6 +152,14 @@ public class ChatActivity extends AppCompatActivity {
                             galleryIntent.setType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
                            // galleryIntent.setType("application/msword");
                             startActivityForResult(Intent.createChooser(galleryIntent, "Select file Word"), Gallery_Pick);
+                        }
+                        if (which==3){
+                            cheker = "mp3";
+                            Intent galleryIntent = new Intent();
+                            galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+                            galleryIntent.setType("audio/*");
+                            // galleryIntent.setType("application/msword");
+                            startActivityForResult(Intent.createChooser(galleryIntent, "Select file audio"), Gallery_Pick);
                         }
                     }
                 });
@@ -368,7 +377,7 @@ public class ChatActivity extends AppCompatActivity {
                    });
                }
            }
-           else {
+           else if(cheker.equals("docx")){
                if (requestCode == Gallery_Pick && resultCode == RESULT_OK && data != null){
                    loadingBar.setTitle("Sending Chat File");
                    loadingBar.setMessage("Please wait, while your chat message is sending...");
@@ -386,6 +395,63 @@ public class ChatActivity extends AppCompatActivity {
                    final String message_push_id = user_message_key.getKey();
 
                    StorageReference filePath = MessageImageStorageRef.child(message_push_id + ".docx");
+
+                   filePath.putFile(fileUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                       @Override
+                       public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                           if (task.isSuccessful()){
+                               final String downloadUrl = task.getResult().getDownloadUrl().toString();
+
+
+                               Map messageTextBody = new HashMap();
+                               messageTextBody.put("message", downloadUrl);
+                               messageTextBody.put("time", saveCurrentTime);
+                               messageTextBody.put("date", saveCurrentDate);
+                               messageTextBody.put("type", cheker);
+                               messageTextBody.put("from", messageSenderID);
+
+                               Map messageBodyDetails = new HashMap();
+                               messageBodyDetails.put(message_sender_ref + "/" + message_push_id, messageTextBody);
+                               messageBodyDetails.put(message_receiver_ref + "/" + message_push_id, messageTextBody);
+
+
+                               RootRef.updateChildren(messageBodyDetails);
+                               loadingBar.dismiss();
+                           }
+                       }
+                   }).addOnFailureListener(new OnFailureListener() {
+                       @Override
+                       public void onFailure(@NonNull Exception e) {
+                           loadingBar.dismiss();
+                           Toast.makeText(ChatActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                       }
+                   }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                       @Override
+                       public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                           double p = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                           loadingBar.setMessage((int) p + "%   Uploading...");
+                       }
+                   });
+               }
+           }
+           else {
+               if (requestCode == Gallery_Pick && resultCode == RESULT_OK && data != null){
+                   loadingBar.setTitle("Sending Chat File");
+                   loadingBar.setMessage("Please wait, while your chat message is sending...");
+                   loadingBar.show();
+
+
+                   Uri fileUri = data.getData();
+
+                   final String message_sender_ref = "Messages/" + messageSenderID + "/" + messageReceiverID;
+                   final String message_receiver_ref = "Messages/" + messageReceiverID + "/" + messageSenderID;
+
+                   DatabaseReference user_message_key = RootRef.child("Messages").child(messageSenderID)
+                           .child(messageReceiverID).push();
+
+                   final String message_push_id = user_message_key.getKey();
+
+                   StorageReference filePath = MessageImageStorageRef.child(message_push_id + ".mp3");
 
                    filePath.putFile(fileUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                        @Override
