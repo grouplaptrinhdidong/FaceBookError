@@ -268,6 +268,7 @@ public class ChatActivity extends AppCompatActivity {
 
             loadingBar.setTitle("Sending Chat Image");
             loadingBar.setMessage("Please wait, while your chat message is sending...");
+            loadingBar.show();
 
 
             Uri ImageUri=data.getData();

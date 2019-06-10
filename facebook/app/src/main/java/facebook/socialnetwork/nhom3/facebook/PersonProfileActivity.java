@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,6 +29,7 @@ public class PersonProfileActivity extends AppCompatActivity {
     private TextView username, userProfileName, userStatus, userCountry, userGender, userRelationship, userDob;
     private CircleImageView userProfileImage;
     private Button AddFriendbtn, Declinebtn;
+    private ScrollView profileScrollView;
 
     private DatabaseReference FriendRequestRef, UsersRef, FriendRef;
     private FirebaseAuth mAuth;
@@ -75,6 +77,7 @@ public class PersonProfileActivity extends AppCompatActivity {
                     userRelationship.setText("Relationship: " + myRelationshipStatus);
 
                     MaintananceofButtons();
+
 
                 }
             }
@@ -321,6 +324,7 @@ public class PersonProfileActivity extends AppCompatActivity {
 
         AddFriendbtn = (Button) findViewById(R.id.person_send_friend_request_btn);
         Declinebtn = (Button) findViewById(R.id.person_decline_friend_request_btn);
+        profileScrollView = (ScrollView) findViewById(R.id.profile_scrollview);
 
         CURRENT_STATE = "not_friends";
     }

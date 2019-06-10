@@ -137,7 +137,13 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
                 Picasso.with(holder.receiverMessageImage.getContext()).load(messages.getMessage())
                         .into(holder.receiverMessageImage);
 
-
+                holder.receiverMessageImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(userMessagesList.get(position).getMessage()));
+                        holder.itemView.getContext().startActivity(intent);
+                    }
+                });
 
             }else {
 

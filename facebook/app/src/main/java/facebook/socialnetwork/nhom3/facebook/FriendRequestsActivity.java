@@ -100,6 +100,11 @@ public class FriendRequestsActivity extends AppCompatActivity {
                                 if (dataSnapshot.exists()){
                                     String type = dataSnapshot.getValue().toString();
                                     if (type.equals("received")){
+                                        viewHolder.Acceptbtn.setVisibility(View.VISIBLE);
+                                        //viewHolder.Declinebtn.setVisibility(View.VISIBLE);
+                                        viewHolder.myStatus.setVisibility(View.VISIBLE);
+                                        viewHolder.myName.setVisibility(View.VISIBLE);
+                                        viewHolder.profileImage.setVisibility(View.VISIBLE);
                                         UserRef.child(list_user_id).addValueEventListener(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -136,6 +141,7 @@ public class FriendRequestsActivity extends AppCompatActivity {
 
                                                                 }
                                                             });
+
                                                     viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View v) {
@@ -181,6 +187,13 @@ public class FriendRequestsActivity extends AppCompatActivity {
                                             }
                                         });
                                     }
+                                    else {
+                                        viewHolder.Acceptbtn.setVisibility(View.INVISIBLE);
+                                       // viewHolder.Declinebtn.setVisibility(View.INVISIBLE);
+                                        viewHolder.myStatus.setVisibility(View.INVISIBLE);
+                                        viewHolder.myName.setVisibility(View.INVISIBLE);
+                                        viewHolder.profileImage.setVisibility(View.INVISIBLE);
+                                    }
                                 }
 
                             }
@@ -190,19 +203,6 @@ public class FriendRequestsActivity extends AppCompatActivity {
 
                             }
                         });
-
-
-                      /*  viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                String visit_user_id = getRef(position).getKey();
-
-                                Intent profileIntent = new Intent(FriendRequestsActivity.this, PersonProfileActivity.class);
-                                profileIntent.putExtra("visit_user_id",visit_user_id);
-                                startActivity(profileIntent);
-                            }
-                        });*/
 
                     }
 
@@ -215,17 +215,21 @@ public class FriendRequestsActivity extends AppCompatActivity {
 
         View mView;
 
-        // CircleImageView profileImage;
+        TextView myName, myStatus;
+        CircleImageView profileImage;
 
-        Button Acceptbtn, Declinebtn;
+        Button Acceptbtn;
+
 
         public FriendRequestsViewHolder(@NonNull View itemView) {
             super(itemView);
 
             mView = itemView;
+            myName=(TextView) mView.findViewById(R.id.friend_requests_fullname);
+            myStatus=(TextView) mView.findViewById(R.id.friend_requests_status);
             Acceptbtn = itemView.findViewById(R.id.requests_accept_btn);
-            Declinebtn = itemView.findViewById(R.id.requests_decline_btn);
-            // profileImage = itemView.findViewById(R.id.friend_requests_imageProfile);
+            //Declinebtn = itemView.findViewById(R.id.requests_decline_btn);
+            profileImage = itemView.findViewById(R.id.friend_requests_imageProfile);
 
         }
 
