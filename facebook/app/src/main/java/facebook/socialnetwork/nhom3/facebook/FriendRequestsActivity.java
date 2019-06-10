@@ -61,7 +61,7 @@ public class FriendRequestsActivity extends AppCompatActivity {
 
         mToolbar = (Toolbar) findViewById(R.id.friend_requests_toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("friend Requets");
+        getSupportActionBar().setTitle("Friend Requests");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
@@ -188,11 +188,95 @@ public class FriendRequestsActivity extends AppCompatActivity {
                                         });
                                     }
                                     else {
-                                        viewHolder.Acceptbtn.setVisibility(View.INVISIBLE);
+                                        viewHolder.Acceptbtn.setVisibility(View.VISIBLE);
+                                        viewHolder.Acceptbtn.setText("View profile");
                                        // viewHolder.Declinebtn.setVisibility(View.INVISIBLE);
-                                        viewHolder.myStatus.setVisibility(View.INVISIBLE);
-                                        viewHolder.myName.setVisibility(View.INVISIBLE);
-                                        viewHolder.profileImage.setVisibility(View.INVISIBLE);
+                                        viewHolder.myStatus.setVisibility(View.VISIBLE);
+                                        viewHolder.myName.setVisibility(View.VISIBLE);
+                                        viewHolder.profileImage.setVisibility(View.VISIBLE);
+
+                                        UserRef.child(list_user_id).addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                if (dataSnapshot.hasChild("profileimage")){
+                                                    final String requestUsername = dataSnapshot.child("fullname").getValue().toString();
+                                                    final String requestUserStatus = "Last friend request sent";
+                                                    final String requestUserProfileImage = dataSnapshot.child("profileimage").getValue().toString();
+
+
+
+
+                                                    viewHolder.setFullname(requestUsername);
+                                                    viewHolder.setStatus(requestUserStatus);
+                                                    viewHolder.setProfileimage(getApplicationContext(),requestUserProfileImage);
+
+                                                    viewHolder.Acceptbtn.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                            Intent profileintent =new Intent(FriendRequestsActivity.this, PersonProfileActivity.class);
+                                                            profileintent.putExtra("visit_user_id",list_user_id);
+                                                            startActivity(profileintent);
+                                                        }
+                                                    });
+
+                                                    FriendRequestRef.child(list_user_id)
+                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                @Override
+                                                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                                                }
+
+                                                                @Override
+                                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                                }
+                                                            });
+
+                                                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                            CharSequence options[] = new CharSequence[]{
+                                                                    requestUsername + "'s Profile",
+                                                                    "Send Message"
+                                                            };
+                                                            AlertDialog.Builder builder =new AlertDialog.Builder(FriendRequestsActivity.this);
+                                                            builder.setTitle("Select Option");
+
+                                                            builder.setItems(options, new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                                    //option view profile
+                                                                    if(which ==0){
+
+                                                                        Intent profileintent =new Intent(FriendRequestsActivity.this, PersonProfileActivity.class);
+                                                                        profileintent.putExtra("visit_user_id",list_user_id);
+                                                                        startActivity(profileintent);
+
+                                                                    }if(which==1){
+
+                                                                        //option chat
+                                                                        Intent Chatintent =new Intent(FriendRequestsActivity.this, ChatActivity.class);
+                                                                        Chatintent.putExtra("visit_user_id",list_user_id);
+                                                                        Chatintent.putExtra("userName",requestUsername);
+                                                                        startActivity(Chatintent);
+                                                                    }
+                                                                }
+                                                            });
+
+                                                            builder.show();
+                                                        }
+                                                    });
+
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
+
                                     }
                                 }
 

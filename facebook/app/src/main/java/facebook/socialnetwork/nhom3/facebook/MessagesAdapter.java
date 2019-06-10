@@ -127,43 +127,123 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
             }
         }
         else{
+            if (fromMessageType.equals("image")){
+                if(fromUserID.equals(messageSenderID)){
 
-            if(fromUserID.equals(messageSenderID)){
+                    holder.receiverMessageImage.setVisibility(View.VISIBLE);
+                    holder.ReceiverMessageText.setVisibility(View.INVISIBLE);
+                    holder.SenderMessageText.setVisibility(View.INVISIBLE);
 
-                holder.receiverMessageImage.setVisibility(View.VISIBLE);
-                holder.ReceiverMessageText.setVisibility(View.INVISIBLE);
-                holder.SenderMessageText.setVisibility(View.INVISIBLE);
+                    Picasso.with(holder.receiverMessageImage.getContext()).load(messages.getMessage())
+                            .into(holder.receiverMessageImage);
 
-                Picasso.with(holder.receiverMessageImage.getContext()).load(messages.getMessage())
-                        .into(holder.receiverMessageImage);
+                    holder.receiverMessageImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(userMessagesList.get(position).getMessage()));
+                            holder.itemView.getContext().startActivity(intent);
+                        }
+                    });
 
-                holder.receiverMessageImage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(userMessagesList.get(position).getMessage()));
-                        holder.itemView.getContext().startActivity(intent);
+                }else {
+
+                    holder.receiverProfileImage.setVisibility(View.VISIBLE);
+                    holder.senderMessageImage.setVisibility(View.VISIBLE);
+
+                    holder.ReceiverMessageText.setVisibility(View.INVISIBLE);
+                    holder.SenderMessageText.setVisibility(View.INVISIBLE);
+
+
+                    Picasso.with(holder.senderMessageImage.getContext()).load(messages.getMessage())
+                            .into(holder.senderMessageImage);
+
+                    holder.senderMessageImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(userMessagesList.get(position).getMessage()));
+                            holder.itemView.getContext().startActivity(intent);
+                        }
+                    });
+                }
+            }
+            else {
+                if (fromMessageType.equals("docx")){
+                    if(fromUserID.equals(messageSenderID)){
+
+                        holder.receiverMessageImage.setVisibility(View.VISIBLE);
+                        holder.senderMessageImage.setImageResource(R.drawable.fileword);
+                        holder.ReceiverMessageText.setVisibility(View.INVISIBLE);
+                        holder.SenderMessageText.setVisibility(View.INVISIBLE);
+
+                        holder.receiverMessageImage.setImageResource(R.drawable.fileword);
+
+                        holder.receiverMessageImage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(userMessagesList.get(position).getMessage()));
+                                holder.itemView.getContext().startActivity(intent);
+                            }
+                        });
+
+                    }else {
+
+                        holder.receiverProfileImage.setVisibility(View.VISIBLE);
+                        holder.senderMessageImage.setVisibility(View.VISIBLE);
+
+                        holder.receiverMessageImage.setImageResource(R.drawable.fileword);
+                        holder.ReceiverMessageText.setVisibility(View.INVISIBLE);
+                        holder.SenderMessageText.setVisibility(View.INVISIBLE);
+
+
+                        holder.senderMessageImage.setImageResource(R.drawable.fileword);
+
+                        holder.senderMessageImage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(userMessagesList.get(position).getMessage()));
+                                holder.itemView.getContext().startActivity(intent);
+                            }
+                        });
                     }
-                });
+                }
+                else {
+                    if(fromUserID.equals(messageSenderID)){
 
-            }else {
+                        holder.receiverMessageImage.setVisibility(View.VISIBLE);
+                        holder.ReceiverMessageText.setVisibility(View.INVISIBLE);
+                        holder.SenderMessageText.setVisibility(View.INVISIBLE);
 
-                holder.receiverProfileImage.setVisibility(View.VISIBLE);
-                holder.senderMessageImage.setVisibility(View.VISIBLE);
+                        holder.receiverMessageImage.setImageResource(R.drawable.filepdf);
+                        holder.senderMessageImage.setImageResource(R.drawable.filepdf);
 
-                holder.ReceiverMessageText.setVisibility(View.INVISIBLE);
-                holder.SenderMessageText.setVisibility(View.INVISIBLE);
+                        holder.receiverMessageImage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(userMessagesList.get(position).getMessage()));
+                                holder.itemView.getContext().startActivity(intent);
+                            }
+                        });
 
+                    }else {
 
-                Picasso.with(holder.senderMessageImage.getContext()).load(messages.getMessage())
-                        .into(holder.senderMessageImage);
+                        holder.receiverProfileImage.setVisibility(View.VISIBLE);
+                        holder.senderMessageImage.setVisibility(View.VISIBLE);
 
-                holder.senderMessageImage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(userMessagesList.get(position).getMessage()));
-                        holder.itemView.getContext().startActivity(intent);
+                        holder.ReceiverMessageText.setVisibility(View.INVISIBLE);
+                        holder.SenderMessageText.setVisibility(View.INVISIBLE);
+                        holder.senderMessageImage.setImageResource(R.drawable.filepdf);
+
+                        holder.receiverMessageImage.setImageResource(R.drawable.filepdf);
+
+                        holder.senderMessageImage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(userMessagesList.get(position).getMessage()));
+                                holder.itemView.getContext().startActivity(intent);
+                            }
+                        });
                     }
-                });
+                }
             }
         }
 
