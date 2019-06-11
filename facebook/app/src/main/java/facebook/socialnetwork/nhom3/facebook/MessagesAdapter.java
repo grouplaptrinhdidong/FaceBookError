@@ -211,8 +211,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 
                         holder.receiverMessageImage.setVisibility(View.VISIBLE);
                         holder.senderMessageImage.setImageResource(R.drawable.filemp3);
-                        holder.senderMessageImage.setMaxHeight(1);
-                        holder.senderMessageImage.set
                         holder.ReceiverMessageText.setVisibility(View.INVISIBLE);
                         holder.SenderMessageText.setVisibility(View.INVISIBLE);
 
